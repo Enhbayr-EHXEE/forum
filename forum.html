@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TODO</title>
+    <style>
+        body {
+        margin: 0px;
+        }
+        .container {
+        width: 100vw;
+        height: 100vh;
+        background-color: #ADEFD1FF;
+        display: flex;
+        flex-direction: column;
+        }
+        .nemeh {
+        display: flex;
+        justify-content: center;
+        }
+        input {
+        margin-top: 30px;
+        width: 500px;
+        height: 30px;
+        font-size: 20px;
+        }
+        button {
+        margin-top: 30px;
+        width: 50px;
+        height: 36px;
+        font-size: 12px;
+        }
+        .small {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        }
+        .small div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 510px;
+        height: 25px;
+        background-color:rgb(181, 213, 245);
+        border: black 1px solid;
+        margin-top: 10px;
+        }
+        .small div button {
+        margin-top: 0px;
+        height: 25px;
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-auth.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="nemeh">
+            <input id="todo" type="text" placeholder="Type..." />
+            <button id="tovch" onclick="tovch()">post</button>
+        </div>
+
+        <div class="small"></div>
+    </div>
+</body>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyB5DsvTHCgWcHW_12x36g6j93e7a0JFgVs",
+        authDomain: "ehxee-984eb.firebaseapp.com",
+        databaseURL: "https://ehxee-984eb.firebaseio.com",
+        projectId: "ehxee-984eb",
+        storageBucket: "ehxee-984eb.appspot.com",
+        messagingSenderId: "785542445854",
+        appId: "1:785542445854:web:903cebb3282b0f3fa6e70f",
+        measurementId: "G-DDYTT1LB3P"
+    };
+    firebase.initializeApp(firebaseConfig);
+</script>
+<script>
+    var urlParams = new URLSearchParams(window.location.search);
+    const userName = urlParams.get('userName');
+    const db = firebase.database();
+    const todo = document.getElementById("todo")
+    db.ref(`tomObject/Users/${userName}/Todo`).on('value', snapshot => {
+        document.getElementsByClassName("small")[0].innerHTML = ""
+        const data = snapshot.val();
+        let values;
+        if (data != null) {
+            values = Object.values(data);
+        } else {
+            values = []
+        }
+        for (let i = 0; i < values.length; i++) {
+            const d = document.createElement("div");
+            const p = document.createElement("p");
+            p.innerHTML = values[i].hiihzuil;
+            const btn = document.createElement("button");
+            btn.innerHTML = "X";
+            btn.onclick = () => {
+                db.ref(`tomObject/Users/${userName}/Todo` + "/" + values[i].hiihzuil).remove();
+            }
+            p.style.marginTop="0px";
+            d.appendChild(p);
+            d.appendChild(btn);
+            document.getElementsByClassName('small')[0].appendChild(d);
+            todo.value = " ";
+        }
+    })
+
+    const tovch = () => {
+        db.ref('tomObject/Users/' + userName + '/Todo/' + todo.value).set({
+            hiihzuil: todo.value,
+        });
+    }
+    document.addEventListener("keyup", event => {
+        if (event.code == "Enter") {
+            tovch();
+        }
+    })
+</script>
+
+</html>
