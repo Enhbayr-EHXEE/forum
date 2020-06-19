@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOGIN</title>
+  <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-auth.js"></script>
+  <style> 
+    body {
+    margin: 0px;
+    }
+    .container {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      flex-direction: column;
+      background-color: lightskyblue;
+      justify-content: center;
+    }
+    .nevtreh {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 70px;
+    }
+    input {
+      border-radius: 25px;
+      margin-top: 10px;
+      font-size: 24px;
+      width: 400px;
+    }
+    .dood {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+    button {
+      border-radius: 25px;
+      font-size: 20px;
+      margin: 10px;
+      background-color: #d4efdf;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nevtreh">
+      <input id="name" type="text "style="outline:none" placeholder="Username" />
+      <input id="pass" type="password" style="outline:none"type="text" placeholder="Password" />
+    </div>
+    <div class="dood">
+      <button style="outline:none" onclick="add()">add</button>
+      <button style="outline:none" onclick="login()">Login</button>
+      <button style="outline:none" onclick="signin()">GOOGLE</button>
+      <button style="outline:none" onclick="loginface()">FACEBOOK</button>
+    </div>
+  </div>
+</body>
+
+<script >
+  const firebaseConfig = {
+    apiKey: "AIzaSyB5DsvTHCgWcHW_12x36g6j93e7a0JFgVs",
+    authDomain: "ehxee-984eb.firebaseapp.com",
+    databaseURL: "https://ehxee-984eb.firebaseio.com",
+    projectId: "ehxee-984eb",
+    storageBucket: "ehxee-984eb.appspot.com",
+    messagingSenderId: "785542445854",
+    appId: "1:785542445854:web:903cebb3282b0f3fa6e70f",
+    measurementId: "G-DDYTT1LB3P"
+  };
+  firebase.initializeApp(firebaseConfig);
+    const username = document.getElementById("name")
+    const password = document.getElementById("pass")
+    const db = firebase.database();
+    const add = () => {
+        db.ref('tomObject/Users/' + username.value).set({
+            username: username.value,
+            password: password.value,
+        })
+    }
+    const login = () => {
+        db.ref(`tomObject/Users/${username.value}`).once('value').then(snap => {
+            if (snap.val() == null) {
+                alert('user oldsongui')
+            } else {
+                if (password.value == snap.val().password) {
+                    window.location.href = `forum.html?userName=${username.value}`
+                } else {
+                    alert('password buruu bn');
+                }
+            }
+        })
+    }
+    const signin = () => {
+    let provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+    firebase.auth().signInWithPopup(provider).then(function (result) {
+      let token = result.credential.accessToken;
+      let user = result.user;
+      window.location.href = `forum.html?userName=${user.uid}`
+    }).catch((error) => {
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      let email = error.email;
+      let credential = error.credential;
+      alert('retry')
+    });
+  }
+  const loginface = () => {
+        let provider = new firebase.auth.FacebookAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(function (result) {
+            let token = result.credential.accessToken;
+            let user = result.user;
+            console.log(user)
+            window.location.href = `forum.html?userName=${user.uid}`
+        }).catch(function (error) {
+            let errorCode = error.code;
+            let errorMessage = error.message;
+            let email = error.email;
+            let credential = error.credential;
+            alert('retry')
+        });
+  }
+</script>
+
+</html>
