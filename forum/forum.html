@@ -4,14 +4,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TODO</title>
+    <title>Forum</title>
     <style>
         body {
         margin: 0px;
+        height: 100vw;
+        width: 100vw;
         }
         .container {
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         background-color: #ADEFD1FF;
         display: flex;
         flex-direction: column;
@@ -28,7 +30,6 @@
         }
         button {
         margin-top: 30px;
-        width: 50px;
         height: 36px;
         font-size: 12px;
         }
@@ -37,12 +38,13 @@
         flex-direction: column;
         align-items: center;
         }
-        .small div {
+        .big{
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
-        width: 510px;
-        height: 25px;
+        font-size: 24px;
+        width: 1000px;
+        height: 100px;
         background-color:rgb(181, 213, 245);
         border: black 1px solid;
         margin-top: 10px;
@@ -50,6 +52,14 @@
         .small div button {
         margin-top: 0px;
         height: 25px;
+        }
+        .big2{
+            display: flex;
+            justify-content: space-between;
+        }
+        .big3{
+            display: flex;
+            justify-content: center;
         }
     </style>
     <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
@@ -96,16 +106,30 @@
         }
         for (let i = 0; i < values.length; i++) {
             const d = document.createElement("div");
+            const d1 = document.createElement("div");
+            const d2 = document.createElement("div");
             const p = document.createElement("p");
             p.innerHTML = values[i].hiihzuil;
             const btn = document.createElement("button");
             btn.innerHTML = "X";
+            const comment = document.createElement("button");
+            comment.innerHTML = "comment"
+            comment.style.width=""
+            d.className ="big"
+            d1.className ="big2"
+            d2.className = "big3"
             btn.onclick = () => {
                 db.ref(`tomObject/Users/${userName}/Todo` + "/" + values[i].hiihzuil).remove();
             }
+            comment.onclick = () =>{
+                
+            }
             p.style.marginTop="0px";
-            d.appendChild(p);
-            d.appendChild(btn);
+            d1.appendChild(p);
+            d1.appendChild(btn);
+            d2.appendChild(comment);
+            d.appendChild(d1);
+            d.appendChild(d2);
             document.getElementsByClassName('small')[0].appendChild(d);
             todo.value = " ";
         }

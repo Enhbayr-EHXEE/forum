@@ -101,7 +101,8 @@
     firebase.auth().signInWithPopup(provider).then(function (result) {
       let token = result.credential.accessToken;
       let user = result.user;
-      window.location.href = `forum.html?userName=${user.uid}`
+      console.log(user)
+      window.location.href = `forum.html?userName=${user.displayName}`
     }).catch((error) => {
       let errorCode = error.code;
       let errorMessage = error.message;
@@ -116,7 +117,7 @@
             let token = result.credential.accessToken;
             let user = result.user;
             console.log(user)
-            window.location.href = `forum.html?userName=${user.uid}`
+            window.location.href = `forum.html?userName=${user.displayName}`
         }).catch(function (error) {
             let errorCode = error.code;
             let errorMessage = error.message;
